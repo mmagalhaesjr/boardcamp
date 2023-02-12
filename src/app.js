@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import gamesRoutes from './routes/games.routes.js';
-import customersRoutes from './routes/custumers.routes.js';
+import customersRoutes from './routes/customers.routes.js';
 import rentalsRoutes from './routes/rentals.routes.js';
 
 dotenv.config();
