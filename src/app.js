@@ -9,15 +9,15 @@ import rentalsRoutes from './routes/rentals.routes.js';
 dotenv.config();
 
 
-const server = express();
-server.use(express.json());
-server.use(cors());
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-server.use([gamesRoutes,customersRoutes,rentalsRoutes]);
+app.use([gamesRoutes,customersRoutes,rentalsRoutes]);
 
 
-const porta = process.env.PORTA  || 5001;
-server.listen(porta, () => {
+const porta = process.env.PORTA  || 5000;
+app.listen(porta, () => {
     console.log(`*** RODANDO NA PORTA ${porta} ***`);
 
 });
