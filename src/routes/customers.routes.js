@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { insertCustomer, listCustomer } from '../controller/customers.controller.js';
-import { validateCustomer } from '../middlewares/customer.middleware.js';
+import { getCustomerId, insertCustomer, listCustomer, updateCustomer } from '../controller/customers.controller.js';
+import { validateUpdateCustomer, validateCustomer } from '../middlewares/customer.middleware.js';
 
 
 const customersRoutes = Router();
@@ -14,10 +14,10 @@ customersRoutes.post('/customers',validateCustomer,insertCustomer)
 customersRoutes.get('/customers',listCustomer)
 
 //buscar clientes por id
-customersRoutes.get('/customers/:id')
+customersRoutes.get('/customers/:id',getCustomerId)
 
 //atualizar cliente por id
-customersRoutes.put('/customers/:id')
+customersRoutes.put('/customers/:id',validateUpdateCustomer,updateCustomer)
 
 
 

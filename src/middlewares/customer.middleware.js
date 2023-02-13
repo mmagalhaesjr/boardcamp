@@ -20,7 +20,26 @@ export async function validateCustomer(req,res,next){
 }
 
 
+export async function validateUpdateCustomer(req,res,next){
+
+const user = req.body
+const userId = req.params.id
+
+const {error} = customerSchema.validate(user)
+
+if(error){
+  return res.sendStatus(400)
+}
+
+const checkCpf = await db.query(`SELECT * FROM customers WHERE cpf = $1`,[user.cpf])
 
 
+if(checkCpf.rows[0]){
+   if(checkCpf.rows[0].id != userId){
+     return res.sendStatus(409)
+   }
+}
 
+next()
 
+}

@@ -8,7 +8,6 @@ export async function insertGame(req,res){
 }
 
 
-
 export async function listGames(req,res){
      const games = await db.query(`SELECT * FROM games `)
      
