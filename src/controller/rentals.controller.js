@@ -55,7 +55,9 @@ export async function finishRental(req, res) {
     const dayToReturn = new Date(rentDate.getTime() + daysRented)
     const daysDelayed = (returnDate.getTime() - dayToReturn.getTime()) / (1000 * 3600 * 24) 
 
-    const delayFee = daysDelayed * pricePerDay
+    const delayFee = parseInt(daysDelayed) * pricePerDay
+    returnDate.toISOString().split('T')[0]
+    console.log(returnDate, delayFee, rentalId, daysDelayed)
     const update = await db.query(`UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3`,[returnDate, delayFee, rentalId])
 
     res.sendStatus(200)
