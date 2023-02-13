@@ -1,10 +1,35 @@
 import { db } from '../config/database.js';
 
 export async function listRentals(req, res) {
-    const rentals = await db.query(`SELECT * FROM rentals`)
-    res.send(rentals.rows)
+    const rentals = await db.query(`SELECT json_build_object(
+        'id', rentals.id,
+        'customer.Id', rentals."customerId",
+        'gameId', rentals."gameId",
+        'rentDate', rentals."rentDate",
+        'daysRented', rentals."gameId",
+        'returnDate', rentals."returnDate",
+        'originalPrice', rentals."originalPrice",
+        'delayFee', rentals."delayFee",
+        
+        'customer', json_build_object(
+            'id', customers.id,
+            'name', customers.name
+        ),
+        'game', json_build_object(
+            'id', games.id,
+            'name', games.name
+        )
+    )
+    FROM rentals
+    JOIN customers
+        ON rentals."customerId" = customers.id
+    JOIN games
+        ON rentals."gameId" = games.id;
+    `)
 
-    // tem que incluir as infos do costumer e o game tb na resposta
+    const result = rentals.rows.map(r => r.json_build_object)
+    res.send(result)
+
 }
 
 export async function insertRentals(req, res) {
