@@ -17,3 +17,11 @@ export const customerSchema = Joi.object({
     birthday:Joi.date().iso().required()
 
 })
+
+
+export const rentalsSchema = Joi.object({
+    
+    customerId: Joi.number().min(1).required(),
+    gameId: Joi.number().min(1).required(),
+    daysRented: Joi.number().min(1).required()
+})
