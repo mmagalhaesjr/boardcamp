@@ -6,7 +6,7 @@ export async function listRentals(req, res) {
         'customer.Id', rentals."customerId",
         'gameId', rentals."gameId",
         'rentDate', rentals."rentDate",
-        'daysRented', rentals."gameId",
+        'daysRented', rentals."daysRented",
         'returnDate', rentals."returnDate",
         'originalPrice', rentals."originalPrice",
         'delayFee', rentals."delayFee",
@@ -46,8 +46,25 @@ export async function insertRentals(req, res) {
     res.sendStatus(201)
 }
 
+export async function finishRental(req, res) {
+    const rentalId = req.params.id
+    const returnDate = new Date()
+    const pricePerDay = res.locals.rental.originalPrice / res.locals.rental.daysRented
+    const rentDate = new Date(res.locals.rental.rentDate);
+    const daysRented = (res.locals.rental.daysRented * 1000 * 3600 * 24)
+    const dayToReturn = new Date(rentDate.getTime() + daysRented)
+    const daysDelayed = (returnDate.getTime() - dayToReturn.getTime()) / (1000 * 3600 * 24) 
+
+    const delayFee = daysDelayed * pricePerDay
+    const update = await db.query(`UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3`,[returnDate, delayFee, rentalId])
+
+    res.sendStatus(200)
+}
+
+
 export async function deleteRental(req, res) {
     const rentalId = req.params.id
     await db.query(`DELETE FROM rentals WHERE id = $1`, [rentalId])
     res.sendStatus(200)
 }
+

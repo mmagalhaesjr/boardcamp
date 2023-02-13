@@ -59,3 +59,22 @@ export async function verifyRentalIdToDelete(req, res, next) {
 
     next()
 }
+
+
+export async function validateDevolution(req, res, next) {
+    const rentalId = req.params.id
+
+    const rental = await db.query(`SELECT * FROM rentals WHERE id = $1`, [rentalId])
+
+    if (!rental.rows[0]) {
+        return res.sendStatus(404)
+    }
+
+    if(rental.rows[0].returnDate){
+    return res.sendStatus(400)
+    }
+
+    res.locals.rental = rental.rows[0]
+
+    next()
+}
